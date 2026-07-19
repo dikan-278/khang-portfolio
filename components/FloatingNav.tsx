@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Briefcase, Home, Mail, Sparkles, User } from "lucide-react";
+import { Blocks, Briefcase, Home, Mail, Sparkles, User } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageProvider";
 
 const SECTIONS = [
   { href: "#top", key: "navHome" as const, icon: Home },
+  { href: "#skills", key: "navSkills" as const, icon: Blocks },
   { href: "#work", key: "navWork" as const, icon: Briefcase },
   { href: "#ai-workflow", key: "navAi" as const, icon: Sparkles },
   { href: "#experience", key: "navCareer" as const, icon: User },
@@ -14,6 +15,7 @@ const SECTIONS = [
 export default function FloatingNav() {
   const { t } = useLanguage();
   const [active, setActive] = useState("#top");
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const sections = SECTIONS.map((l) => document.querySelector(l.href)).filter(
@@ -35,8 +37,27 @@ export default function FloatingNav() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const hero = document.querySelector("#top");
+    if (!hero) return;
+
+    // Reveal the floating nav only once the hero (with its own CTAs) has
+    // scrolled out of view, so the two CTA systems never compete on-screen.
+    const heroObserver = new IntersectionObserver(
+      ([entry]) => setVisible(!entry.isIntersecting),
+      { rootMargin: "-70% 0px 0px 0px" }
+    );
+
+    heroObserver.observe(hero);
+    return () => heroObserver.disconnect();
+  }, []);
+
   return (
-    <nav className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2">
+    <nav
+      className={`fixed bottom-5 left-1/2 z-50 -translate-x-1/2 transition-all duration-300 ${
+        visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
+      }`}
+    >
       <div className="flex items-center gap-1 rounded-full border border-border bg-surface/95 p-1.5 shadow-[0_20px_50px_-20px_rgba(20,21,26,0.35)] backdrop-blur-md">
         {SECTIONS.map((link) => {
           const Icon = link.icon;

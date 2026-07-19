@@ -1,0 +1,52 @@
+import {
+  Microscope,
+  ClipboardList,
+  GitCompare,
+  Workflow,
+  Users,
+  CheckCircle2,
+  ListTodo,
+  RefreshCw,
+  CalendarClock,
+  ShieldAlert,
+  Handshake,
+  Repeat2,
+  Cpu,
+  Sparkles,
+  Plug,
+  Terminal,
+  Bot,
+  Gauge,
+  FileStack,
+  FileText,
+  BookOpen,
+  ListChecks,
+  LayoutTemplate,
+  FlaskConical,
+  Code2,
+  Database,
+  Braces,
+  Cable,
+  Route,
+  GitBranch,
+  Wrench,
+  KanbanSquare,
+  BookMarked,
+  PenTool,
+  LayoutPanelLeft,
+  PencilRuler,
+  type LucideIcon,
+} from "lucide-react";
+
+// Icons are matched by position, not by text, so they stay correct across
+// EN/VI since lib/content.ts keeps identical item order in both locales.
+export const skillCategoryIcons: LucideIcon[] = [Microscope, ListTodo, Cpu, FileStack, Code2, Wrench];
+
+export const skillItemIcons: LucideIcon[][] = [
+  [ClipboardList, GitCompare, Workflow, Users, CheckCircle2],
+  [RefreshCw, CalendarClock, ShieldAlert, Handshake, Repeat2],
+  [Sparkles, Plug, Terminal, Bot, Gauge],
+  [FileText, BookOpen, ListChecks, LayoutTemplate, FlaskConical],
+  [Database, Braces, Cable, Route, GitBranch],
+  [KanbanSquare, BookMarked, PenTool, LayoutPanelLeft, PencilRuler],
+];

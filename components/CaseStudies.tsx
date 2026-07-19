@@ -18,26 +18,34 @@ function CaseStudyCard({
 }) {
   const [open, setOpen] = useState(index === 0);
 
+  const initial = study.client.trim().charAt(0);
+
   return (
     <Reveal delay={index * 0.08}>
       <div className="overflow-hidden rounded-[1.75rem] border border-border bg-surface">
         <button
           onClick={() => setOpen((v) => !v)}
-          className="card-hover relative flex h-64 w-full flex-col justify-end p-6 text-left sm:h-72"
-          style={{ background: study.gradient }}
+          className="card-hover flex w-full flex-col text-left sm:flex-row"
         >
-          <div className="absolute right-5 top-5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-            {study.period}
+          <div
+            className="relative h-28 shrink-0 overflow-hidden sm:h-auto sm:w-56"
+            style={{ background: study.gradient }}
+          >
+            <div className="dot-pattern absolute inset-0 opacity-50" />
+            <span className="absolute left-5 top-5 text-4xl font-bold text-white/85">{initial}</span>
+            <span className="absolute bottom-4 left-5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+              {study.period}
+            </span>
           </div>
-          <div className="flex items-end justify-between gap-4 rounded-2xl bg-white/95 p-4 text-foreground shadow-lg backdrop-blur-sm">
+          <div className="flex flex-1 items-center justify-between gap-4 p-6 sm:p-7">
             <div>
               <span className="text-[11px] font-medium uppercase tracking-widest text-accent">
                 {study.client}
               </span>
-              <h3 className="mt-0.5 text-base font-semibold leading-snug sm:text-lg">
+              <h3 className="mt-1 text-lg font-semibold leading-snug sm:text-xl">
                 {study.title}
               </h3>
-              <p className="mt-1 text-xs text-muted">{study.heroMetric}</p>
+              <p className="mt-1.5 text-sm text-muted">{study.heroMetric}</p>
             </div>
             <span
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-transform ${
@@ -107,7 +115,7 @@ export default function CaseStudies() {
   const { t } = useLanguage();
 
   return (
-    <section id="work" className="mx-auto max-w-6xl px-6 py-20">
+    <section id="work" className="mx-auto max-w-5xl px-6 py-20">
       <Reveal>
         <p className="text-xs font-medium uppercase tracking-widest text-accent">{t.ui.workSectionLabel}</p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{t.ui.workTitle}</h2>

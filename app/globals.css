@@ -59,3 +59,9 @@ body {
   background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1.5px, transparent 1.5px);
   background-size: 10px 10px;
 }
+
+.page-dot-grid {
+  background-image: radial-gradient(rgba(20, 21, 26, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black, transparent 75%);
+}

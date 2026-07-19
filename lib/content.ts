@@ -40,6 +40,7 @@ export type Content = {
   ui: {
     resume: string;
     navHome: string;
+    navSkills: string;
     navWork: string;
     navAi: string;
     navCareer: string;
@@ -101,6 +102,7 @@ const en: Content = {
   ui: {
     resume: "Resume",
     navHome: "Home",
+    navSkills: "Skills",
     navWork: "Work",
     navAi: "AI",
     navCareer: "Career",
@@ -326,6 +328,7 @@ const vi: Content = {
   ui: {
     resume: "CV",
     navHome: "Trang chủ",
+    navSkills: "Kỹ năng",
     navWork: "Dự án",
     navAi: "AI",
     navCareer: "Sự nghiệp",

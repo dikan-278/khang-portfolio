@@ -11,7 +11,7 @@ export default function AiWorkflow() {
 
   return (
     <section id="ai-workflow" className="border-y border-border bg-surface/40">
-      <div className="mx-auto max-w-6xl px-6 py-24">
+      <div className="mx-auto max-w-5xl px-6 py-24">
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <p className="text-xs font-medium uppercase tracking-widest text-accent">

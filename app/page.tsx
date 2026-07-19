@@ -18,11 +18,11 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <WorkedWith />
+        <Skills />
         <CaseStudies />
         <Approach />
         <AiWorkflow />
         <Experience />
-        <Skills />
         <StatCards />
         <Contact />
       </main>
