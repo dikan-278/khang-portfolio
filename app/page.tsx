@@ -5,6 +5,7 @@ import CaseStudies from "@/components/CaseStudies";
 import Approach from "@/components/Approach";
 import AiWorkflow from "@/components/AiWorkflow";
 import Experience from "@/components/Experience";
+import Education from "@/components/Education";
 import Skills from "@/components/Skills";
 import StatCards from "@/components/StatCards";
 import Contact from "@/components/Contact";
@@ -23,6 +24,7 @@ export default function Home() {
         <Approach />
         <AiWorkflow />
         <Experience />
+        <Education />
         <StatCards />
         <Contact />
       </main>

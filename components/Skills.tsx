@@ -19,12 +19,12 @@ export default function Skills() {
         </h2>
       </Reveal>
 
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {t.skills.map((group, i) => {
-          const CategoryIcon = skillCategoryIcons[i];
-          return (
-            <Reveal key={group.category} delay={i * 0.05}>
-              <div className="card-hover h-full rounded-[1.5rem] border border-border bg-surface p-5">
+      <Reveal delay={0.1}>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {t.skills.map((group, i) => {
+            const CategoryIcon = skillCategoryIcons[i];
+            return (
+              <div key={group.category} className="card-hover h-full rounded-[1.5rem] border border-border bg-surface p-5">
                 <div className="flex items-center gap-2.5">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
                     <CategoryIcon size={18} />
@@ -57,10 +57,10 @@ export default function Skills() {
                   })}
                 </div>
               </div>
-            </Reveal>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      </Reveal>
     </section>
   );
 }

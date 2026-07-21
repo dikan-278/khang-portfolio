@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download } from "lucide-react";
+import { Download, Mail, Phone } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageProvider";
 
 function LanguageToggle() {
@@ -43,10 +43,28 @@ export default function Nav() {
       }`}
     >
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="#top" className="font-semibold tracking-tight">
+        <a href="#top" className="shrink-0 font-semibold tracking-tight">
           Khang Tran
         </a>
-        <div className="flex items-center gap-2">
+
+        <div className="hidden items-center gap-5 text-sm text-muted lg:flex">
+          <a
+            href={`mailto:${t.profile.email}`}
+            className="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+          >
+            <Mail size={14} />
+            {t.profile.email}
+          </a>
+          <a
+            href={`tel:${t.profile.phone.replace(/\s+/g, "")}`}
+            className="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+          >
+            <Phone size={14} />
+            {t.profile.phone}
+          </a>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2">
           <LanguageToggle />
           <a
             href="/cv-khang-tran.pdf"

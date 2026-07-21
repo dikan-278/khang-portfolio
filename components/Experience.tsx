@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { Check } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageProvider";
 import { experienceYears } from "@/lib/content";
+import { employerLogos } from "@/lib/clientLogos";
 import Reveal from "./Reveal";
 
 export default function Experience() {
@@ -36,13 +39,15 @@ export default function Experience() {
                   }`}
                 />
               </span>
+              {year === activeYear ? (
+                <span className="-mt-[9px] flex h-4 w-4 items-center justify-center rounded-full border-2 border-background bg-accent-2 text-foreground">
+                  <Check size={10} strokeWidth={3} />
+                </span>
+              ) : (
+                <span className="-mt-[5px] h-2.5 w-2.5 rounded-full border-2 border-background bg-border transition-colors group-hover:bg-accent/40" />
+              )}
               <span
-                className={`-mt-[5px] h-2.5 w-2.5 rounded-full border-2 border-background transition-colors ${
-                  year === activeYear ? "bg-accent" : "bg-border group-hover:bg-accent/40"
-                }`}
-              />
-              <span
-                className={`text-sm font-medium transition-colors ${
+                className={`font-mono text-sm font-medium transition-colors ${
                   year === activeYear ? "text-2xl font-semibold text-foreground" : "text-muted"
                 }`}
               >
@@ -57,9 +62,21 @@ export default function Experience() {
         <div className="mt-8 rounded-[1.75rem] border border-border bg-surface p-6 sm:p-8">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h3 className="text-xl font-semibold">{activeJob.role}</h3>
-            <span className="text-sm text-muted">{activeJob.period}</span>
+            <span className="font-mono text-sm text-muted">{activeJob.period}</span>
           </div>
-          <p className="mt-1 text-sm font-medium text-accent">{activeJob.company}</p>
+          <div className="mt-1 flex items-center gap-2">
+            {employerLogos[activeJob.logoKey] && (
+              <span className="relative h-5 w-5 shrink-0 overflow-hidden rounded-md border border-border bg-surface">
+                <Image
+                  src={employerLogos[activeJob.logoKey]}
+                  alt={activeJob.company}
+                  fill
+                  className="object-contain p-0.5"
+                />
+              </span>
+            )}
+            <p className="text-sm font-medium text-accent">{activeJob.company}</p>
+          </div>
           <ul className="mt-4 space-y-2.5">
             {activeJob.bullets.map((b) => (
               <li key={b} className="flex gap-2.5 text-sm text-foreground/85">

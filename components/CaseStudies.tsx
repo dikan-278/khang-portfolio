@@ -19,6 +19,8 @@ function CaseStudyCard({
   const [open, setOpen] = useState(index === 0);
 
   const initial = study.client.trim().charAt(0);
+  const docCode = `CASE-${String(index + 1).padStart(2, "0")}`;
+  const isLive = study.status === "live";
 
   return (
     <Reveal delay={index * 0.08}>
@@ -33,8 +35,19 @@ function CaseStudyCard({
           >
             <div className="dot-pattern absolute inset-0 opacity-50" />
             <span className="absolute left-5 top-5 text-4xl font-bold text-white/85">{initial}</span>
-            <span className="absolute bottom-4 left-5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-              {study.period}
+
+            <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-black/25 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                {isLive && (
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-2 opacity-75" />
+                )}
+                <span className={`relative h-1.5 w-1.5 rounded-full ${isLive ? "bg-accent-2" : "bg-white/70"}`} />
+              </span>
+              {isLive ? ui.caseStatusLive : ui.caseStatusShipped}
+            </span>
+
+            <span className="absolute bottom-4 left-5 max-w-[calc(100%-2.5rem)] overflow-hidden text-ellipsis whitespace-nowrap rounded-full bg-white/20 px-2.5 py-1 font-mono text-[10px] font-medium tracking-tight text-white backdrop-blur-sm">
+              {docCode} · {study.period}
             </span>
           </div>
           <div className="flex flex-1 items-center justify-between gap-4 p-6 sm:p-7">
@@ -68,13 +81,13 @@ function CaseStudyCard({
             >
               <div className="p-6 sm:p-8">
                 <div className="flex flex-wrap gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted">
                     <Users size={12} /> {study.team}
                   </span>
                   {study.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-border px-3 py-1 text-xs text-muted"
+                      className="rounded-full border border-border px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-muted"
                     >
                       {tag}
                     </span>

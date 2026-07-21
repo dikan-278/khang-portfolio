@@ -18,6 +18,9 @@ export type CaseStudyContent = {
   aiNote?: string;
   tags: string[];
   gradient: string;
+  // Delivery status is a fact, not a translated string — identical across
+  // locales. Drives the stamp badge on the case-study document header.
+  status: "live" | "shipped";
 };
 
 export type ExperienceContent = {
@@ -28,12 +31,21 @@ export type ExperienceContent = {
   bullets: string[];
   startYear: number;
   endYear: number;
+  // Locale-independent lookup key for the employer's logo (see
+  // lib/clientLogos.ts) — the `company` string itself differs by locale
+  // (VI carries the full legal name), so it can't double as the key.
+  logoKey: string;
 };
 
+export type EducationContent = { degree: string; institution: string; period: string };
+export type CertificationContent = { name: string; issuer: string };
 export type SkillGroupContent = { category: string; items: string[] };
 export type ProcessStepContent = { step: string; title: string; detail: string };
 export type AiWorkflowItem = { title: string; detail: string };
-export type StatHighlight = { value: string; label: string; sub: string };
+// `suffix` is rendered after the count-up animation settles (e.g. "+", "%",
+// or a range tail like "–40%") — kept separate from `value` so the number
+// itself can animate from 0.
+export type StatHighlight = { value: string; suffix: string; label: string; sub: string };
 
 export type Content = {
   meta: { title: string; description: string };
@@ -55,6 +67,8 @@ export type Content = {
     workSectionLabel: string;
     workTitle: string;
     workSubtitle: string;
+    caseStatusLive: string;
+    caseStatusShipped: string;
     problemLabel: string;
     approachLabel: string;
     outcomeLabel: string;
@@ -66,6 +80,11 @@ export type Content = {
     careerLabel: string;
     careerTitle: string;
     careerSubtitle: string;
+    educationLabel: string;
+    educationTitle: string;
+    educationSubtitle: string;
+    educationHeading: string;
+    certificationsHeading: string;
     toolkitLabel: string;
     toolkitTitle: string;
     contactLabel: string;
@@ -90,6 +109,8 @@ export type Content = {
   caseStudies: CaseStudyContent[];
   aiWorkflow: AiWorkflowItem[];
   experience: ExperienceContent[];
+  education: EducationContent[];
+  certifications: CertificationContent[];
   skills: SkillGroupContent[];
 };
 
@@ -108,7 +129,7 @@ const en: Content = {
     navCareer: "Career",
     navContact: "Contact",
     heroStatus: "Open to work",
-    heroRatingNote: "3+ years · Vietravel, AstraZeneca, KBank",
+    heroRatingNote: "4+ years · Vietravel, AstraZeneca, KBank",
     heroCtaPrimary: "View case studies",
     heroCtaSecondary: "Get in touch",
     heroBasedInLabel: "Based in",
@@ -118,6 +139,8 @@ const en: Content = {
     workTitle: "Case studies",
     workSubtitle:
       "Three enterprise delivery engagements spanning CRM, LMS, and campaign platforms — from requirements through go-live.",
+    caseStatusLive: "Live",
+    caseStatusShipped: "Shipped",
     problemLabel: "Problem",
     approachLabel: "Approach",
     outcomeLabel: "Outcome",
@@ -130,6 +153,11 @@ const en: Content = {
     careerLabel: "Career",
     careerTitle: "My journey through delivery",
     careerSubtitle: "Pick a year to see what I was leading at the time.",
+    educationLabel: "Credentials",
+    educationTitle: "Education & certifications",
+    educationSubtitle: "Formal training behind the delivery work above.",
+    educationHeading: "Education",
+    certificationsHeading: "Certifications",
     toolkitLabel: "Toolkit",
     toolkitTitle: "Skills & competencies",
     contactLabel: "Let's talk",
@@ -145,14 +173,16 @@ const en: Content = {
     phone: "+84 352 121 181",
     linkedinUrl: "https://linkedin.com/in/tdkhang278",
     exitStory:
-      "3+ years turning ambiguous enterprise requirements (CRM, HRM, LMS, AI platforms) into shipped solutions for clients like Vietravel, AstraZeneca, Mobifone and KBank — now using Claude/MCP tooling to cut BA documentation time 30-40%.",
+      "4+ years turning ambiguous enterprise requirements (CRM, HRM, LMS, AI platforms) into shipped solutions for clients like Vietravel, AstraZeneca, Mobifone and KBank — now using Claude/MCP tooling to cut BA documentation time 30-40%.",
   },
   heroTitleLead: "I turn messy requirements into",
   heroTitleHighlight: "shipped systems",
   workedWith: ["Vietravel", "AstraZeneca", "Mobifone", "De Heus Vietnam", "KBank Vietnam"],
   statHighlights: [
-    { value: "3", label: "Years in enterprise delivery", sub: "CRM, HRM, LMS, AI platforms" },
-    { value: "92%", label: "UAT satisfaction", sub: "AstraZeneca AI-LMS MVP, 300+ employees" },
+    { value: "4", suffix: "+", label: "Years in enterprise delivery", sub: "CRM, HRM, LMS, AI platforms" },
+    { value: "20", suffix: "M+", label: "Customer records delivered", sub: "KBank national lucky-draw campaign, on schedule" },
+    { value: "30", suffix: "–40%", label: "Faster BA documentation", sub: "Using Claude + MCP tooling on live engagements" },
+    { value: "100", suffix: "%", label: "On-time milestone delivery", sub: "Across AstraZeneca and DR Digital engagements" },
   ],
   process: [
     {
@@ -198,6 +228,7 @@ const en: Content = {
         "Used Claude (Cowork, Code) and MCP tooling to draft BRDs, compare vendor proposals, generate test cases, and summarize meeting notes — cutting documentation turnaround time by an estimated 30-40%.",
       tags: ["CRM", "System Integration", "Vendor Management", "Travel & Tourism"],
       gradient: "linear-gradient(135deg, #4433ff 0%, #6c5cff 45%, #9b8fff 100%)",
+      status: "live",
     },
     {
       slug: "astrazeneca-lms",
@@ -215,6 +246,7 @@ const en: Content = {
         "Delivered the MVP in 10 weeks with 92% user satisfaction in UAT, rolled out to 300+ employees, and reduced support load through the AI chatbot's self-serve learner support.",
       tags: ["LMS", "AI Chatbot", "Pharma", "SSO Integration"],
       gradient: "linear-gradient(135deg, #14151a 0%, #2a2c38 55%, #4433ff 100%)",
+      status: "shipped",
     },
     {
       slug: "kbank-lucky-draw",
@@ -232,6 +264,7 @@ const en: Content = {
         "Shipped a transparent lucky-draw system handling 20M+ customer records on schedule, meeting both campaign and compliance requirements.",
       tags: ["Banking", "Compliance", "Data at Scale"],
       gradient: "linear-gradient(135deg, #b6ff3c 0%, #7ee0a8 55%, #4433ff 100%)",
+      status: "shipped",
     },
   ],
   aiWorkflow: [
@@ -243,6 +276,7 @@ const en: Content = {
   experience: [
     {
       company: "Vietravel Tourism Joint Stock Company",
+      logoKey: "vietravel",
       role: "BA & Project Manager",
       period: "Sep 2025 – Present",
       location: "Ho Chi Minh City, Vietnam",
@@ -256,6 +290,7 @@ const en: Content = {
     },
     {
       company: "DR Digital",
+      logoKey: "dr-digital",
       role: "BA & Project Manager",
       period: "Jul 2024 – Sep 2025",
       startYear: 2024,
@@ -268,6 +303,7 @@ const en: Content = {
     },
     {
       company: "Foolist Creative",
+      logoKey: "foolist-creative",
       role: "Business Analyst",
       period: "Apr 2023 – Feb 2024",
       startYear: 2023,
@@ -280,6 +316,7 @@ const en: Content = {
     },
     {
       company: "FPT Information System Joint Stock Company",
+      logoKey: "fpt-is",
       role: "Business Analyst",
       period: "Mar 2022 – Mar 2023",
       startYear: 2022,
@@ -290,6 +327,22 @@ const en: Content = {
         "Supported go-live with user training and post-deployment support",
       ],
     },
+  ],
+  education: [
+    {
+      degree: "Master of Information Systems",
+      institution: "University of Information Technology, VNU-HCM",
+      period: "2024 – Present",
+    },
+    {
+      degree: "Bachelor of Telecommunications",
+      institution: "Posts and Telecommunications Institute of Technology",
+      period: "2017 – 2022",
+    },
+  ],
+  certifications: [
+    { name: "Advanced Business Analyst & Product Owner", issuer: "TrueSkill Center" },
+    { name: "English Proficiency B1 (VSTEP)", issuer: "Posts and Telecommunications Institute of Technology" },
   ],
   skills: [
     {
@@ -334,7 +387,7 @@ const vi: Content = {
     navCareer: "Sự nghiệp",
     navContact: "Liên hệ",
     heroStatus: "Sẵn sàng nhận việc",
-    heroRatingNote: "3+ năm · Vietravel, AstraZeneca, KBank",
+    heroRatingNote: "4+ năm · Vietravel, AstraZeneca, KBank",
     heroCtaPrimary: "Xem case study",
     heroCtaSecondary: "Liên hệ ngay",
     heroBasedInLabel: "Hiện đang ở",
@@ -344,6 +397,8 @@ const vi: Content = {
     workTitle: "Case studies",
     workSubtitle:
       "Ba dự án triển khai doanh nghiệp trải dài CRM, LMS và nền tảng chiến dịch — từ thu thập yêu cầu đến go-live.",
+    caseStatusLive: "Đang chạy",
+    caseStatusShipped: "Đã bàn giao",
     problemLabel: "Vấn đề",
     approachLabel: "Cách tiếp cận",
     outcomeLabel: "Kết quả",
@@ -356,6 +411,11 @@ const vi: Content = {
     careerLabel: "Sự nghiệp",
     careerTitle: "Hành trình sự nghiệp",
     careerSubtitle: "Chọn một năm để xem tôi đang phụ trách dự án nào vào thời điểm đó.",
+    educationLabel: "Bằng cấp",
+    educationTitle: "Học vấn & chứng chỉ",
+    educationSubtitle: "Nền tảng đào tạo phía sau các dự án triển khai ở trên.",
+    educationHeading: "Học vấn",
+    certificationsHeading: "Chứng chỉ",
     toolkitLabel: "Bộ kỹ năng",
     toolkitTitle: "Kỹ năng & năng lực",
     contactLabel: "Cùng trao đổi",
@@ -371,14 +431,16 @@ const vi: Content = {
     phone: "+84 352 121 181",
     linkedinUrl: "https://linkedin.com/in/tdkhang278",
     exitStory:
-      "3+ năm biến các yêu cầu doanh nghiệp còn mơ hồ (CRM, HRM, LMS, nền tảng AI) thành giải pháp đã triển khai thực tế cho các khách hàng như Vietravel, AstraZeneca, Mobifone và KBank — hiện đang dùng công cụ Claude/MCP để rút ngắn 30-40% thời gian làm tài liệu BA.",
+      "4+ năm biến các yêu cầu doanh nghiệp còn mơ hồ (CRM, HRM, LMS, nền tảng AI) thành giải pháp đã triển khai thực tế cho các khách hàng như Vietravel, AstraZeneca, Mobifone và KBank — hiện đang dùng công cụ Claude/MCP để rút ngắn 30-40% thời gian làm tài liệu BA.",
   },
   heroTitleLead: "Tôi biến yêu cầu ngổn ngang thành",
   heroTitleHighlight: "hệ thống đã triển khai",
   workedWith: ["Vietravel", "AstraZeneca", "Mobifone", "De Heus Vietnam", "KBank Vietnam"],
   statHighlights: [
-    { value: "3", label: "Năm kinh nghiệm triển khai doanh nghiệp", sub: "CRM, HRM, LMS, nền tảng AI" },
-    { value: "92%", label: "Hài lòng UAT", sub: "MVP AI-LMS AstraZeneca, 300+ nhân viên" },
+    { value: "4", suffix: "+", label: "Năm kinh nghiệm triển khai doanh nghiệp", sub: "CRM, HRM, LMS, nền tảng AI" },
+    { value: "20", suffix: "M+", label: "Hồ sơ khách hàng đã xử lý", sub: "Chiến dịch quay số trúng thưởng quốc gia KBank, đúng tiến độ" },
+    { value: "30", suffix: "–40%", label: "Rút ngắn thời gian làm tài liệu BA", sub: "Nhờ công cụ Claude + MCP trong các dự án thực tế" },
+    { value: "100", suffix: "%", label: "Milestone hoàn thành đúng hạn", sub: "Xuyên suốt các dự án AstraZeneca và DR Digital" },
   ],
   process: [
     {
@@ -424,6 +486,7 @@ const vi: Content = {
         "Dùng Claude (Cowork, Code) và công cụ MCP để soạn BRD, so sánh đề xuất nhà cung cấp, tạo test case, và tóm tắt biên bản họp — giúp rút ngắn thời gian làm tài liệu khoảng 30-40%.",
       tags: ["CRM", "Tích hợp hệ thống", "Quản lý nhà cung cấp", "Du lịch & Lữ hành"],
       gradient: "linear-gradient(135deg, #4433ff 0%, #6c5cff 45%, #9b8fff 100%)",
+      status: "live",
     },
     {
       slug: "astrazeneca-lms",
@@ -441,6 +504,7 @@ const vi: Content = {
         "Bàn giao MVP trong 10 tuần với 92% mức độ hài lòng trong UAT, triển khai cho 300+ nhân viên, và giảm tải hỗ trợ nhờ chatbot AI phục vụ học viên tự tra cứu.",
       tags: ["LMS", "AI Chatbot", "Dược phẩm", "Tích hợp SSO"],
       gradient: "linear-gradient(135deg, #14151a 0%, #2a2c38 55%, #4433ff 100%)",
+      status: "shipped",
     },
     {
       slug: "kbank-lucky-draw",
@@ -458,6 +522,7 @@ const vi: Content = {
         "Triển khai thành công hệ thống quay số trúng thưởng minh bạch, xử lý 20M+ hồ sơ khách hàng đúng tiến độ, đáp ứng cả yêu cầu chiến dịch lẫn tuân thủ.",
       tags: ["Ngân hàng", "Tuân thủ", "Dữ liệu quy mô lớn"],
       gradient: "linear-gradient(135deg, #b6ff3c 0%, #7ee0a8 55%, #4433ff 100%)",
+      status: "shipped",
     },
   ],
   aiWorkflow: [
@@ -468,7 +533,8 @@ const vi: Content = {
   ],
   experience: [
     {
-      company: "Công ty Cổ phần Du lịch và Tiếp thị Giao thông vận tải Việt Nam (Vietravel)",
+      company: "Công ty Cổ phần Du lịch Vietravel",
+      logoKey: "vietravel",
       role: "BA & Project Manager",
       period: "09/2025 – Hiện tại",
       location: "TP. Hồ Chí Minh, Việt Nam",
@@ -482,6 +548,7 @@ const vi: Content = {
     },
     {
       company: "DR Digital",
+      logoKey: "dr-digital",
       role: "BA & Project Manager",
       period: "07/2024 – 09/2025",
       startYear: 2024,
@@ -494,6 +561,7 @@ const vi: Content = {
     },
     {
       company: "Foolist Creative",
+      logoKey: "foolist-creative",
       role: "Business Analyst",
       period: "04/2023 – 02/2024",
       startYear: 2023,
@@ -506,6 +574,7 @@ const vi: Content = {
     },
     {
       company: "Công ty Cổ phần Hệ thống Thông tin FPT",
+      logoKey: "fpt-is",
       role: "Business Analyst",
       period: "03/2022 – 03/2023",
       startYear: 2022,
@@ -516,6 +585,22 @@ const vi: Content = {
         "Hỗ trợ go-live với đào tạo người dùng và hỗ trợ sau triển khai",
       ],
     },
+  ],
+  education: [
+    {
+      degree: "Thạc sĩ Hệ thống Thông tin",
+      institution: "Trường Đại học Công nghệ Thông tin, ĐHQG-HCM",
+      period: "2024 – Hiện tại",
+    },
+    {
+      degree: "Cử nhân Viễn thông",
+      institution: "Học viện Công nghệ Bưu chính Viễn thông",
+      period: "2017 – 2022",
+    },
+  ],
+  certifications: [
+    { name: "Advanced Business Analyst & Product Owner", issuer: "TrueSkill Center" },
+    { name: "Chứng chỉ Tiếng Anh B1 (VSTEP)", issuer: "Học viện Công nghệ Bưu chính Viễn thông" },
   ],
   skills: [
     {

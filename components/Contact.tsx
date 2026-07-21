@@ -3,6 +3,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageProvider";
 import Reveal from "./Reveal";
+import Magnetic from "./Magnetic";
 
 function LinkedinIcon({ size = 15 }: { size?: number }) {
   return (
@@ -31,22 +32,26 @@ export default function Contact() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
-            >
-              <Mail size={15} />
-              {profile.email}
-            </a>
-            <a
-              href={profile.linkedinUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-background/25 px-6 py-3 text-sm font-medium transition-colors hover:border-background/60"
-            >
-              <LinkedinIcon size={15} />
-              {t.ui.heroLinkedin}
-            </a>
+            <Magnetic>
+              <a
+                href={`mailto:${profile.email}`}
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+              >
+                <Mail size={15} />
+                {profile.email}
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.25}>
+              <a
+                href={profile.linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-background/25 px-6 py-3 text-sm font-medium transition-colors hover:border-background/60"
+              >
+                <LinkedinIcon size={15} />
+                {t.ui.heroLinkedin}
+              </a>
+            </Magnetic>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-background/60">

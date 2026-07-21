@@ -13,8 +13,17 @@ export default function Approach() {
         <div className="overflow-hidden rounded-[2rem] border border-border bg-surface">
           <div className="flex items-start justify-between gap-4 bg-accent p-7 text-white">
             <div>
-              <p className="text-5xl font-semibold leading-none">{t.process.length}</p>
-              <p className="mt-3 text-sm font-medium">{t.ui.approachSectionTitle}</p>
+              <div className="flex items-center gap-1.5">
+                {t.process.map((item) => (
+                  <span
+                    key={item.step}
+                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/15 font-mono text-[11px] font-semibold"
+                  >
+                    {item.step}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-4 text-sm font-medium">{t.ui.approachSectionTitle}</p>
               <p className="mt-1 max-w-xs text-sm text-white/75">{t.ui.approachSectionSubtitle}</p>
             </div>
             <ArrowUpRight className="shrink-0 text-white/60" size={22} />
