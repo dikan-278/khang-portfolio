@@ -2,7 +2,6 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import WorkedWith from "@/components/WorkedWith";
 import CaseStudies from "@/components/CaseStudies";
-import Approach from "@/components/Approach";
 import AiWorkflow from "@/components/AiWorkflow";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
@@ -21,7 +20,6 @@ export default function Home() {
         <WorkedWith />
         <Skills />
         <CaseStudies />
-        <Approach />
         <AiWorkflow />
         <Experience />
         <Education />

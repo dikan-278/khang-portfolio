@@ -7,7 +7,9 @@ import Reveal from "./Reveal";
 
 function CountUp({ value }: { value: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  // Bottom-only margin: a symmetric one excludes the viewport's left/right
+  // strips, so a number hugging the left edge would never count as in view.
+  const inView = useInView(ref, { once: true, margin: "0px 0px -80px 0px" });
   const [display, setDisplay] = useState(0);
   const target = parseInt(value, 10);
 
@@ -28,25 +30,27 @@ export default function StatCards() {
   const { t } = useLanguage();
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-10">
-      <div className="grid gap-5 sm:grid-cols-2">
+    <section className="mx-auto max-w-6xl px-6 py-12">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {t.statHighlights.map((stat, i) => {
           const accentCard = i % 2 === 1;
           return (
-            <Reveal key={stat.label} delay={i * 0.06}>
+            <Reveal key={stat.label} delay={i * 0.06} className="h-full">
               <div
-                className={
-                  accentCard
-                    ? "dot-pattern relative flex h-full flex-col justify-center overflow-hidden rounded-[1.75rem] bg-accent p-8 text-white"
-                    : "flex h-full flex-col justify-center rounded-[1.75rem] border border-border bg-surface p-8"
-                }
+                className={`relative flex h-full flex-col justify-between overflow-hidden rounded-card p-6 ${
+                  accentCard ? "dot-pattern bg-accent text-white" : "bg-surface-2"
+                }`}
               >
-                <p className="font-mono text-4xl font-semibold tracking-tight sm:text-5xl">
+                <p className="whitespace-nowrap text-4xl font-bold tracking-[-0.04em] xl:text-5xl">
                   <CountUp value={stat.value} />
-                  <span className={accentCard ? "" : "text-accent"}>{stat.suffix}</span>
+                  <span className={accentCard ? "text-accent-light" : "text-accent"}>{stat.suffix}</span>
                 </p>
-                <p className="mt-2 text-sm font-medium">{stat.label}</p>
-                <p className={`mt-1 text-sm ${accentCard ? "text-white/75" : "text-muted"}`}>{stat.sub}</p>
+                <div className="mt-8">
+                  <p className="text-[15px] font-semibold leading-snug">{stat.label}</p>
+                  <p className={`mt-1 text-sm leading-snug ${accentCard ? "text-white/75" : "text-muted"}`}>
+                    {stat.sub}
+                  </p>
+                </div>
               </div>
             </Reveal>
           );

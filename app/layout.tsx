@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/LanguageProvider";
 import LocaleSync from "@/components/LocaleSync";
-import BackgroundDecoration from "@/components/BackgroundDecoration";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin", "latin-ext", "vietnamese"],
 });
 
 const geistMono = Geist_Mono({
@@ -16,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Khang Tran — Senior Business Analyst & Project Manager",
+  title: "Khang Tran — AI-Native Business Analyst & Product Owner",
   description:
-    "BA & Project Manager driving CRM/HRM/LMS delivery with AI-augmented workflows. Case studies: Vietravel CRM, AstraZeneca AI-LMS, KBank Lucky Draw.",
+    "Business Analyst & Project Manager with 4+ years of full-cycle delivery across CRM, ERP, HRM, LMS and AI-powered platforms — working with an AI agent team orchestrated by Claude Code.",
 };
 
 export default function RootLayout({
@@ -29,12 +28,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <LanguageProvider>
           <LocaleSync />
-          <BackgroundDecoration />
           {children}
         </LanguageProvider>
       </body>

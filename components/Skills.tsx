@@ -4,35 +4,46 @@ import { useLanguage } from "@/lib/LanguageProvider";
 import { skillCategoryIcons, skillItemIcons } from "@/lib/skillIcons";
 import { skillBrandLogos, BrandLogoIcon } from "@/lib/brandLogos";
 import Reveal from "./Reveal";
+import SectionHeader from "./SectionHeader";
 
 export default function Skills() {
   const { t } = useLanguage();
 
   return (
-    <section id="skills" className="mx-auto max-w-5xl px-6 py-20">
-      <Reveal>
-        <p className="text-xs font-medium uppercase tracking-widest text-accent">
-          {t.ui.toolkitLabel}
-        </p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          {t.ui.toolkitTitle}
-        </h2>
+    <section id="skills" className="mx-auto max-w-6xl px-6 py-24">
+      <SectionHeader label={t.ui.toolkitLabel} title={t.ui.toolkitTitle} />
+
+      <Reveal delay={0.05}>
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-sm font-medium text-muted">{t.ui.domainsLabel}</span>
+          {t.domains.map((d) => (
+            <span
+              key={d}
+              className="rounded-chip border border-border bg-white px-3 py-1 text-sm font-medium"
+            >
+              {d}
+            </span>
+          ))}
+        </div>
       </Reveal>
 
       <Reveal delay={0.1}>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {t.skills.map((group, i) => {
             const CategoryIcon = skillCategoryIcons[i];
             return (
-              <div key={group.category} className="card-hover h-full rounded-[1.5rem] border border-border bg-surface p-5">
-                <div className="flex items-center gap-2.5">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-                    <CategoryIcon size={18} />
+              <div
+                key={group.category}
+                className="card-hover h-full rounded-card border border-border bg-white p-6 shadow-subtle"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
+                    <CategoryIcon size={20} />
                   </span>
-                  <h3 className="font-semibold">{group.category}</h3>
+                  <h3 className="text-xl font-semibold tracking-tight">{group.category}</h3>
                 </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="mt-5 grid grid-cols-2 gap-2">
                   {group.items.map((item, j) => {
                     const brand = skillBrandLogos[i]?.[j];
                     const ItemIcon = skillItemIcons[i]?.[j];
@@ -40,9 +51,9 @@ export default function Skills() {
                     return (
                       <div
                         key={item}
-                        className="flex items-center gap-2 rounded-xl bg-surface-2 px-2.5 py-2"
+                        className="flex items-center gap-2 rounded-lg bg-surface-2 px-2.5 py-2"
                       >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-surface">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white">
                           {brand ? (
                             <BrandLogoIcon logo={brand} className="h-3.5 w-3.5" />
                           ) : ItemIcon ? (

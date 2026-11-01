@@ -1,138 +1,120 @@
 "use client";
 
-import Image from "next/image";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import type { MouseEvent } from "react";
+import { motion } from "framer-motion";
+import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
 import { ArrowRight, ArrowUpRight, MapPin, Star } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageProvider";
+import { BrandLogoIcon, brandLogos } from "@/lib/brandLogos";
+import HeroFloaters, { CollabCursors } from "./HeroFloaters";
 import Magnetic from "./Magnetic";
 
-// Signature: the photo reads as a laminated ID-badge portrait — a clean
-// circular cutout (white halo, like a die-cut sticker) with a status seal
-// stamped on its rim, the way a physical badge carries a foil "valid" seal
-// rather than text wrapped around the photo itself.
-function AvatarBadge({ initials, photoSrc }: { initials: string; photoSrc?: string }) {
-  return (
-    <div className="relative h-24 w-24 shrink-0 sm:h-28 sm:w-28">
-      <div
-        className="h-full w-full overflow-hidden rounded-full"
-        style={{ boxShadow: "0 0 0 6px var(--surface), 0 8px 20px -8px rgba(20,21,26,0.35)" }}
-      >
-        {photoSrc ? (
-          <Image src={photoSrc} alt="" width={112} height={112} className="h-full w-full object-cover" />
-        ) : (
-          <div className="dot-pattern relative h-full w-full opacity-90">
-            <div
-              className="absolute inset-0"
-              style={{ background: "linear-gradient(135deg, #4433ff 0%, #6c5cff 55%, #9b8fff 100%)" }}
-            />
-            <span className="relative flex h-full w-full items-center justify-center text-2xl font-bold text-white sm:text-[1.7rem]">
-              {initials}
-            </span>
-          </div>
-        )}
-      </div>
+// Handles of the "selection frame" drawn around the headline, like a layer
+// picked on a design canvas.
+const HANDLES = [
+  "left-0 top-0",
+  "left-1/2 top-0",
+  "left-full top-0",
+  "left-0 top-1/2",
+  "left-full top-1/2",
+  "left-0 top-full",
+  "left-1/2 top-full",
+  "left-full top-full",
+];
 
-      <div
-        className="absolute flex h-6 w-6 items-center justify-center rounded-full bg-accent-2 sm:h-7 sm:w-7"
-        style={{ left: "80%", top: "80%", transform: "translate(-50%, -50%)", boxShadow: "0 0 0 3px var(--surface)" }}
-      >
-        <motion.span
-          className="absolute h-full w-full rounded-full bg-accent-2"
-          animate={{ scale: [1, 1.8], opacity: [0.55, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
-        />
-        <span className="relative h-2 w-2 rounded-full bg-foreground" />
-      </div>
-    </div>
-  );
-}
+const INLINE_TOOLS = [
+  brandLogos.jira,
+  brandLogos.confluence,
+  brandLogos.figma,
+  brandLogos.drawio,
+  brandLogos.claude,
+];
 
 export default function Hero() {
   const { t } = useLanguage();
   const { profile } = t;
-
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const springX = useSpring(rotateX, { stiffness: 200, damping: 20 });
-  const springY = useSpring(rotateY, { stiffness: 200, damping: 20 });
-
-  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width - 0.5;
-    const py = (e.clientY - rect.top) / rect.height - 0.5;
-    rotateY.set(px * 10);
-    rotateX.set(-py * 10);
-  }
-
-  function handleMouseLeave() {
-    rotateX.set(0);
-    rotateY.set(0);
-  }
+  const reduce = useReducedMotionSafe();
 
   return (
-    <section id="top" className="relative pt-32 pb-20 sm:pt-40">
-      <div className="mx-auto max-w-xl px-6" style={{ perspective: 1200 }}>
-        {/* lanyard clip */}
+    <section
+      id="top"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-clip px-6 pb-16 pt-28"
+    >
+      <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <HeroFloaters />
+
+      {/* the column's empty space lets hover reach the canvas items beneath it */}
+      <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center text-center [&>*]:pointer-events-auto">
+        {/* headline — the name, set like a layer selected on a canvas */}
         <motion.div
-          className="mx-auto -mb-1 flex w-fit origin-top flex-col items-center"
-          animate={{ rotate: [-2.5, 2.5, -2.5] }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+          className="relative border border-dashed border-foreground/25 px-5 py-2 sm:px-10 sm:py-4"
         >
-          <div className="h-6 w-3 rounded-t-sm bg-border" />
-          <div className="h-3 w-8 rounded-sm bg-foreground" />
+          {HANDLES.map((pos, i) => (
+            <motion.span
+              key={pos}
+              initial={reduce ? false : { scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.6 + i * 0.04, type: "spring", stiffness: 400, damping: 18 }}
+              className={`absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 border border-accent bg-white ${pos}`}
+              aria-hidden="true"
+            />
+          ))}
+          <h1 className="whitespace-nowrap text-[clamp(2.75rem,10.5vw,7.5rem)] font-bold leading-[1] tracking-[-0.04em]">
+            {profile.name}
+            <span className="text-accent" aria-hidden="true">
+              .
+            </span>
+          </h1>
         </motion.div>
 
+        {/* identity: avatar + title, and the open-to-work status */}
         <motion.div
-          initial={{ opacity: 0, y: -36, rotate: -3, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
-          transition={{ type: "spring", stiffness: 140, damping: 14, delay: 0.15 }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ rotateX: springX, rotateY: springY, transformPerspective: 1200 }}
-          className="group relative overflow-hidden rounded-[2rem] border border-border bg-surface p-6 shadow-[0_30px_80px_-40px_rgba(20,21,26,0.35)] sm:p-8"
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.4, 0, 0.2, 1] }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-2.5"
         >
-          <div
-            className="pointer-events-none absolute -inset-y-full left-[-60%] w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 ease-out group-hover:left-[130%] group-hover:opacity-100"
-            aria-hidden="true"
-          />
-
-          <div className="h-1.5 w-full rounded-full bg-accent-soft">
-            <div className="h-1.5 w-2/3 rounded-full bg-accent" />
-          </div>
-
-          <div className="mt-7 flex flex-col items-center text-center">
-            <AvatarBadge initials="KT" />
-            <h1 className="mt-4 text-2xl font-semibold tracking-tight sm:text-[1.75rem]">
-              {profile.name}
-            </h1>
-            <p className="mt-1 text-sm text-muted">{profile.title}</p>
-
-            <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-accent-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-2" />
-              {t.ui.heroStatus}
+          <span className="inline-flex max-w-full items-center gap-3 rounded-full border border-border bg-white py-1.5 pl-1.5 pr-5 text-left shadow-subtle">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-strong text-xs font-bold text-white">
+              KT
             </span>
+            <span className="text-sm font-semibold leading-tight">{profile.title}</span>
+          </span>
 
-            <div className="mt-3 flex items-center gap-2 text-sm text-muted">
-              <span className="flex text-accent">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={13} fill="currentColor" strokeWidth={0} />
-                ))}
-              </span>
-              {t.ui.heroRatingNote}
-            </div>
-          </div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent-2/30 bg-accent-2/10 px-4 py-2.5 text-sm font-semibold text-[#00794f]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-2 opacity-70" />
+              <span className="relative h-2 w-2 rounded-full bg-accent-2" />
+            </span>
+            {t.ui.heroStatus}
+          </span>
+        </motion.div>
 
-          <p className="mt-6 text-[15px] leading-relaxed text-muted">{profile.exitStory}</p>
+        <motion.p
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
+          className="mt-7 max-w-xl text-lg leading-[1.4] text-muted"
+        >
+          {profile.exitStory}
+        </motion.p>
 
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45, ease: [0.4, 0, 0.2, 1] }}
+          className="mt-8 flex flex-col items-center"
+        >
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <Magnetic>
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-foreground px-6 py-3 text-[15px] font-semibold text-white transition-colors duration-300 hover:bg-accent"
               >
                 {t.ui.heroCtaPrimary}
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 transition-transform group-hover:translate-x-0.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0.5">
                   <ArrowRight size={12} />
                 </span>
               </a>
@@ -140,29 +122,53 @@ export default function Hero() {
             <Magnetic strength={0.25}>
               <a
                 href="#contact"
-                className="inline-flex items-center rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-accent/40 hover:text-accent"
+                className="inline-flex items-center rounded-full border border-foreground/15 bg-white px-6 py-3 text-[15px] font-semibold transition-colors duration-300 hover:border-foreground"
               >
                 {t.ui.heroCtaSecondary}
               </a>
             </Magnetic>
           </div>
 
-          <div className="mt-7 flex items-center justify-between border-t border-border pt-4 text-xs text-muted">
-            <span className="inline-flex items-center gap-1.5">
+          <div className="mt-6 flex items-center gap-2 text-sm text-muted">
+            <span className="flex text-accent">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={13} fill="currentColor" strokeWidth={0} />
+              ))}
+            </span>
+            {t.ui.heroRatingNote}
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-chip bg-surface-2 px-3 py-1.5 text-muted">
               <MapPin size={12} />
-              {t.ui.heroBasedInLabel} <strong className="font-medium text-foreground">{profile.location}</strong>
+              {t.ui.heroBasedInLabel}{" "}
+              <strong className="font-medium text-foreground">{profile.location}</strong>
             </span>
             <a
               href={profile.linkedinUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-foreground transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1 rounded-chip bg-surface-2 px-3 py-1.5 font-medium text-foreground transition-colors duration-300 hover:bg-accent hover:text-white"
             >
               {t.ui.heroLinkedin} <ArrowUpRight size={12} />
             </a>
           </div>
+
+          {/* below xl the floating canvas is hidden — keep the toolkit visible */}
+          <div className="mt-8 flex items-center justify-center gap-2 xl:hidden" aria-hidden="true">
+            {INLINE_TOOLS.map((logo) => (
+              <span
+                key={logo.title}
+                className="flex h-10 w-10 items-center justify-center rounded-card bg-white shadow-subtle"
+              >
+                <BrandLogoIcon logo={logo} className="h-5 w-5" />
+              </span>
+            ))}
+          </div>
         </motion.div>
       </div>
+
+      <CollabCursors />
     </section>
   );
 }

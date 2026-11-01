@@ -18,49 +18,55 @@ export default function Contact() {
   const { profile } = t;
 
   return (
-    <section id="contact" className="mx-auto max-w-3xl px-6 pb-32 pt-4">
+    <section id="contact" className="mx-auto max-w-6xl px-6 pb-28 pt-12">
       <Reveal>
-        <div className="overflow-hidden rounded-[2rem] bg-foreground p-10 text-center text-background sm:p-16">
-          <p className="text-xs font-medium uppercase tracking-widest text-background/60">
-            {t.ui.contactLabel}
-          </p>
-          <h2 className="mx-auto mt-4 max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
-            {t.ui.contactTitle}
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-background/70">
-            {t.ui.heroBasedInLabel} {profile.location}. {t.ui.contactSubtitle}
-          </p>
+        <div className="relative overflow-hidden rounded-card bg-accent p-8 text-white sm:p-16">
+          <div className="dot-pattern pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
+          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-accent-light/30 blur-[100px]" aria-hidden="true" />
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Magnetic>
-              <a
-                href={`mailto:${profile.email}`}
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
-              >
-                <Mail size={15} />
-                {profile.email}
-              </a>
-            </Magnetic>
-            <Magnetic strength={0.25}>
-              <a
-                href={profile.linkedinUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-background/25 px-6 py-3 text-sm font-medium transition-colors hover:border-background/60"
-              >
-                <LinkedinIcon size={15} />
-                {t.ui.heroLinkedin}
-              </a>
-            </Magnetic>
-          </div>
+          <div className="relative">
+            <span className="inline-flex items-center gap-2 rounded-chip bg-white/15 px-3 py-1 text-xs font-medium">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-2" />
+              {t.ui.contactLabel}
+            </span>
+            <h2 className="mt-5 max-w-3xl text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+              {t.ui.contactTitle}
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-[1.4] text-white/80">
+              {t.ui.heroBasedInLabel} {profile.location}. {t.ui.contactSubtitle}
+            </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-background/60">
-            <span className="inline-flex items-center gap-1.5">
-              <Phone size={14} /> {profile.phone}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin size={14} /> {profile.location}
-            </span>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Magnetic>
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-[15px] font-semibold text-white transition-colors duration-300 hover:bg-white hover:text-foreground"
+                >
+                  <Mail size={16} />
+                  {profile.email}
+                </a>
+              </Magnetic>
+              <Magnetic strength={0.25}>
+                <a
+                  href={profile.linkedinUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/40 px-6 py-3 text-[15px] font-semibold transition-colors duration-300 hover:bg-white hover:text-foreground"
+                >
+                  <LinkedinIcon size={16} />
+                  {t.ui.heroLinkedin}
+                </a>
+              </Magnetic>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/75">
+              <span className="inline-flex items-center gap-1.5">
+                <Phone size={14} /> {profile.phone}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin size={14} /> {profile.location}
+              </span>
+            </div>
           </div>
         </div>
       </Reveal>

@@ -43,13 +43,23 @@ const MCP: BrandLogo = {
 // null = no official logo available / not a literal branded product — falls
 // back to the generic Lucide icon + label chip in components/Skills.tsx.
 export const skillBrandLogos: (BrandLogo | null)[][] = [
-  [null, null, null, null, null], // Business Analysis
-  [null, null, null, null, null], // Project Management
-  [CLAUDE, MCP, null, null, null], // AI & Automation
-  [null, null, null, null, null], // Documentation
-  [null, null, null, null, null], // Technical (no official Microsoft SQL Server mark available)
-  [JIRA, CONFLUENCE, FIGMA, null, DRAWIO], // Tools (no official Balsamiq mark available)
+  [null, null, null, null, null, null], // Business Analysis
+  [null, null, null, null, null], // Modeling & Design
+  [null, null, null, null, null, null, null], // Project Delivery
+  [null, null, null, null, null, null], // Technical (no official SQL Server / Postman mark available)
+  [JIRA, CONFLUENCE, null, null, FIGMA, null, DRAWIO], // Tools (no ClickUp / Trello / Balsamiq mark available)
+  [CLAUDE, null, null], // AI Tools
 ];
+
+// Named access for decorative uses (e.g. the hero's floating tool chips).
+export const brandLogos = {
+  figma: FIGMA,
+  jira: JIRA,
+  confluence: CONFLUENCE,
+  drawio: DRAWIO,
+  claude: CLAUDE,
+  mcp: MCP,
+};
 
 export function BrandLogoIcon({ logo, className }: { logo: BrandLogo; className?: string }) {
   return (
